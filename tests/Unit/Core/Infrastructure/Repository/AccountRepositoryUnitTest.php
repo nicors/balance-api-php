@@ -4,7 +4,7 @@ namespace Tests\Unit\Core\Domain\Repository;
 
 use PHPUnit\Framework\TestCase;
 use Core\Domain\Entity\Account;
-use Core\Domain\Repository\AccountRepository;
+use Core\Infrastructure\Repository\InMemoryAccountRepository as AccountRepository;
 
 class AccountRepositoryUnitTest extends TestCase
 {
