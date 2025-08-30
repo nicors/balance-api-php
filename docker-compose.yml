@@ -10,8 +10,7 @@ services:
     working_dir: /var/www/
     volumes:
       - ./:/var/www
-        command: sh -c "chown -R www-data:www-data /var/www/data && php-fpm"
-        # command: sh -c "chown -R www-data:www-data /var/www/data && php-fpm"
+    command: sh -c "chown -R www-data:www-data /var/www/data && php-fpm"
   
   nginx:
     image: nginx:alpine
