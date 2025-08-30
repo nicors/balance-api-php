@@ -1,26 +1,60 @@
-# Lumen PHP Framework
+# Financial API
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/lumen-framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/lumen)](https://packagist.org/packages/laravel/lumen-framework)
+This is a simple financial API built with **PHP 8.1** and **Laravel Lumen** that handles deposits, withdrawals, and transfers.
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Architecture
 
-> **Note:** In the years since releasing Lumen, PHP has made a variety of wonderful performance improvements. For this reason, along with the availability of [Laravel Octane](https://laravel.com/docs/octane), we no longer recommend that you begin new projects with Lumen. Instead, we recommend always beginning new projects with [Laravel](https://laravel.com).
+  * **Domain Layer:** Contains the core business logic, including the `Account` entity and the `AccountRepositoryInterface`.
+  * **Application Layer:** Includes the **Use Cases** (`DepositUseCase`, `WithdrawUseCase`, etc.) that orchestrate actions and the `AccountService` that acts as a facade.
+  * **Infrastructure Layer:** Handles technical concerns such as routing, HTTP requests, and data persistence in a JSON file via the `FileAccountRepository`.
 
-## Official Documentation
+## Getting Started
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+Follow these steps to set up and run the project locally.
 
-## Contributing
+### Prerequisites
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+  * **Docker:** Make sure you have Docker installed and running on your system.
 
-## Security Vulnerabilities
+### Running the Application
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+1.  Clone the repository to your local machine.
 
-## License
+2.  Navigate to the project's root directory.
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+3.  Run the following command to build and start the Docker containers (PHP and Nginx):
+
+    ```bash
+    docker-compose up -d --build
+    ```
+
+4.  Install the project dependencies inside the PHP container. This command will install the Laravel Lumen framework and all other required packages.
+
+    ```bash
+    docker-compose exec app composer install
+    ```
+
+5.  The API should now be running. You can test it by accessing `http://localhost:8080` in your browser or with an API client like Postman.
+
+## API Endpoints
+
+The API includes the following endpoints to handle financial operations:
+
+  * **`POST /reset`**
+    Resets the state of the application by clearing all account data.
+
+      - **Response:** `HTTP 200 OK` with an empty body (`"OK"`).
+
+  * **`GET /balance?account_id={ID}`**
+    Retrieves the current balance for a specific account.
+
+      - **Response:**
+          - If the account exists: `HTTP 200 OK` with the account balance as a JSON number.
+          - If the account does not exist: `HTTP 404 NOT FOUND` with the response body `0`.
+
+  * **`POST /event`**
+    Handles deposits, withdrawals, and transfers. The request body must be a JSON object containing the event type and details.
+
+      - **Response:**
+          - If successful: `HTTP 201 CREATED` with the updated account information in the response body.
+          - If the origin account does not exist or has insufficient funds: `HTTP 404 NOT FOUND` with the response body `0`.
