@@ -8,4 +8,5 @@ interface AccountRepositoryInterface
 {
   public function save(Account $account): void;
   public function findById(string $id): ?Account;
+  public function reset(): void;
 }

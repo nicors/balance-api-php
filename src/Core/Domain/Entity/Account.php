@@ -29,4 +29,12 @@ class Account
 
     $this->balance -= $value;
   }
+
+  public function toArray(): array
+  {
+    return [
+      'id' => $this->id,
+      'balance' => $this->balance,
+    ];
+  }
 }

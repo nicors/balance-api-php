@@ -15,7 +15,7 @@ class DepositUseCase
     $account = $this->accountRepository->findById($depositInputDTO->accountId);
 
     if (!$account) {
-      $account = new Account($depositInputDTO->accountId,0);
+      $account = new Account($depositInputDTO->accountId, 0);
     }
 
     $account->deposit($depositInputDTO->amount);
